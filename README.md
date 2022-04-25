@@ -18,7 +18,7 @@
 
 
 ## Screenshots
-![Example toString() of a skiplist](./screenshot.png)
+![Example toString() of a skiplist](./screenshot.PNG)
 <!-- If you have screenshots you'd like to share, include them here. -->
 
 
