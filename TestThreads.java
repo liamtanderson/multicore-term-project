@@ -1,4 +1,5 @@
 import java.util.AbstractSet;
+import java.util.Random;
 
 public class TestThreads {
     //Define threads for multi threaded timing tests
@@ -71,7 +72,6 @@ public class TestThreads {
             }
         }
     }
-
 
     //Make conc. threads to add values
     public void makeAddBetweenNoRepeatsThread(AbstractSet<Integer> list) {

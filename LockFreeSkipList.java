@@ -5,7 +5,7 @@ import java.util.concurrent.atomic.*;
 public class LockFreeSkipList extends AbstractSet<Integer>{
     class Node  {
         final int value;
-        final AtomicMarkableReference<Node >[] next;
+        final AtomicMarkableReference<Node>[] next;
         private int topLevel;
 
         public Node(int value, int height) {
@@ -203,28 +203,6 @@ public class LockFreeSkipList extends AbstractSet<Integer>{
         return (curr.value == v);
     }
 
-    //Used for debugging purposes
-    public String stringify() {
-        String result = "{";
-
-        int bottomLevel = 0;
-        final int lastValue = Integer.MAX_VALUE;
-        Node  pred = head, curr = null;
-
-        for (int level = this.maxLevels; level >= bottomLevel; level--) {
-            result += "\n    "+level+": ";
-            curr = pred.next[level].getReference();
-            while (curr.value < lastValue) {
-                result += curr.value+" ";
-                curr = curr.next[level].getReference();
-            }
-        }
-
-        result += "\n}";
-
-        return result;
-    }
-
     //Decide how high the inserted node should go by flipping a coin over and over again
     private int chooseRandomLevel() {
         int newLevel = 0;
@@ -264,6 +242,7 @@ public class LockFreeSkipList extends AbstractSet<Integer>{
         return size.get();
     }
 
+    /*
     public String toString(){
         String output = "[";
         final int lastValue = Integer.MAX_VALUE;
@@ -277,5 +256,28 @@ public class LockFreeSkipList extends AbstractSet<Integer>{
     
         output += "]";
         return output;
+    }
+    */
+
+    //Used for debugging purposes
+    public String toString() {
+        String result = "{";
+
+        int bottomLevel = 0;
+        final int lastValue = Integer.MAX_VALUE;
+        Node  pred = head, curr = null;
+
+        for (int level = this.maxLevels; level >= bottomLevel; level--) {
+            result += "\n    "+level+": ";
+            curr = pred.next[level].getReference();
+            while (curr.value < lastValue) {
+                result += curr.value+" ";
+                curr = curr.next[level].getReference();
+            }
+        }
+
+        result += "\n}";
+
+        return result;
     }
 }

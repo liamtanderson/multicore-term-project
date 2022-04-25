@@ -10,6 +10,16 @@ public class TimeTests {
         //singleThreadContainsTimingTest2("Fine Grained");
         //singleThreadContainsTimingTest2("Lock-Free");
         
+        /*
+        contentionInsertTest1("Fine Grained");
+        contentionInsertTest1("Lock-Free");
+        contentionInsertTest1("Java-Util");
+        */
+        //contentionInsertTest2();
+        //contentionDeleteTest1();
+        contentionFindTest2();
+
+        /* 3 thread tests
         multiThreadInsertTimingTest1("Fine Grained");
         multiThreadInsertTimingTest1("Lock-Free");
         multiThreadInsertTimingTest1("Java-Util");
@@ -25,6 +35,7 @@ public class TimeTests {
         multiThreadContainsTimingTest1("Fine Grained");
         multiThreadContainsTimingTest1("Lock-Free");
         multiThreadContainsTimingTest1("Java-Util");
+        */
         
     }
 
@@ -39,6 +50,261 @@ public class TimeTests {
         }
         return list;
     }
+
+    public static void contentionInsertTest(String listType){
+        AbstractSet<Integer> list = createList(listType);
+        ContentionThreads threads = new ContentionThreads();
+        for(int i = 1; i < 9; i*=2){
+            long time = threads.contentionInsert(list, i, -100, 100, 100);
+            System.out.println(listType + ": " + time);
+            list = createList(listType);
+        }
+    }
+
+    public static void contentionInsertTest1(){
+        ContentionThreads threads = new ContentionThreads();
+
+        long [] LockFreeTimes = new long[4];
+        AbstractSet<Integer> list = createList("Lock-Free");
+        int j = 0;
+        for(int i = 1; i < 9; i*=2){
+            LockFreeTimes[j] = threads.contentionInsert(list, i, -100, 100, 100);
+            j++;
+        }
+
+        long [] FineGrainedTimes = new long[4];
+        list = createList("Fine Grained");
+        j = 0;
+        for(int i = 1; i < 9; i*=2){
+            FineGrainedTimes[j] = threads.contentionInsert(list, i, -100, 100, 100);
+            j++;
+        }
+
+        j = 0;
+        for(int i = 1; i < 9; i*=2){
+            long margin = (LockFreeTimes[j] - FineGrainedTimes[j])/(LockFreeTimes[j]/100);
+            System.out.println("LockFreeOverFG for " + i + " threads:" + margin);
+            j++;
+        }
+    }
+
+    public static void contentionInsertTest2(){
+        ContentionThreads threads = new ContentionThreads();
+
+        long [] LockFreeTimes = new long[4];
+        AbstractSet<Integer> list = createList("Lock-Free");
+        int j = 0;
+        for(int i = 1; i < 9; i*=2){
+            LockFreeTimes[j] = threads.contentionInsert(list, i, -100, 100, 1000);
+            j++;
+        }
+
+        long [] FineGrainedTimes = new long[4];
+        list = createList("Fine Grained");
+        j = 0;
+        for(int i = 1; i < 9; i*=2){
+            FineGrainedTimes[j] = threads.contentionInsert(list, i, -100, 100, 1000);
+            j++;
+        }
+
+        j = 0;
+        for(int i = 1; i < 9; i*=2){
+            long margin = (LockFreeTimes[j] - FineGrainedTimes[j])/(LockFreeTimes[j]/100);
+            System.out.println("LockFreeOverFG for " + i + " threads:" + margin);
+            j++;
+        }
+    }
+
+    public static void contentionInsertTest3(){
+        ContentionThreads threads = new ContentionThreads();
+
+        long [] LockFreeTimes = new long[4];
+        AbstractSet<Integer> list = createList("Lock-Free");
+        int j = 0;
+        for(int i = 1; i < 9; i*=2){
+            LockFreeTimes[j] = threads.contentionInsert(list, i, -100, 100, 10000);
+            j++;
+        }
+
+        long [] FineGrainedTimes = new long[4];
+        list = createList("Fine Grained");
+        j = 0;
+        for(int i = 1; i < 9; i*=2){
+            FineGrainedTimes[j] = threads.contentionInsert(list, i, -100, 100, 10000);
+            j++;
+        }
+
+        j = 0;
+        for(int i = 1; i < 9; i*=2){
+            long margin = (LockFreeTimes[j] - FineGrainedTimes[j])/(LockFreeTimes[j]/100);
+            System.out.println("LockFreeOverFG for " + i + " threads:" + margin);
+            j++;
+        }
+    }
+
+    public static void contentionDeleteTest1(){
+        ContentionThreads threads = new ContentionThreads();
+
+        long [] LockFreeTimes = new long[4];
+        AbstractSet<Integer> list = createList("Lock-Free");
+        int j = 0;
+        for(int i = 1; i < 9; i*=2){
+            LockFreeTimes[j] = threads.contentionDelete(list, i, -100, 100, 100);
+            j++;
+        }
+
+        long [] FineGrainedTimes = new long[4];
+        list = createList("Fine Grained");
+        j = 0;
+        for(int i = 1; i < 9; i*=2){
+            FineGrainedTimes[j] = threads.contentionDelete(list, i, -100, 100, 100);
+            j++;
+        }
+
+        j = 0;
+        for(int i = 1; i < 9; i*=2){
+            long margin = (LockFreeTimes[j] - FineGrainedTimes[j])/(LockFreeTimes[j]/100);
+            System.out.println("LockFreeOverFG for " + i + " threads:" + margin);
+            j++;
+        }
+    }
+
+    public static void contentionDeleteTest2(){
+        ContentionThreads threads = new ContentionThreads();
+
+        long [] LockFreeTimes = new long[4];
+        AbstractSet<Integer> list = createList("Lock-Free");
+        int j = 0;
+        for(int i = 1; i < 9; i*=2){
+            LockFreeTimes[j] = threads.contentionDelete(list, i, -100, 100, 1000);
+            j++;
+        }
+
+        long [] FineGrainedTimes = new long[4];
+        list = createList("Fine Grained");
+        j = 0;
+        for(int i = 1; i < 9; i*=2){
+            FineGrainedTimes[j] = threads.contentionDelete(list, i, -100, 100, 1000);
+            j++;
+        }
+
+        j = 0;
+        for(int i = 1; i < 9; i*=2){
+            long margin = (LockFreeTimes[j] - FineGrainedTimes[j])/(LockFreeTimes[j]/100);
+            System.out.println("LockFreeOverFG for " + i + " threads:" + margin);
+            j++;
+        }
+    }
+
+    public static void contentionDeleteTest3(){
+        ContentionThreads threads = new ContentionThreads();
+
+        long [] LockFreeTimes = new long[4];
+        AbstractSet<Integer> list = createList("Lock-Free");
+        int j = 0;
+        for(int i = 1; i < 9; i*=2){
+            LockFreeTimes[j] = threads.contentionDelete(list, i, -100, 100, 10000);
+            j++;
+        }
+
+        long [] FineGrainedTimes = new long[4];
+        list = createList("Fine Grained");
+        j = 0;
+        for(int i = 1; i < 9; i*=2){
+            FineGrainedTimes[j] = threads.contentionDelete(list, i, -100, 100, 10000);
+            j++;
+        }
+
+        j = 0;
+        for(int i = 1; i < 9; i*=2){
+            long margin = (LockFreeTimes[j] - FineGrainedTimes[j])/(LockFreeTimes[j]/100);
+            System.out.println("LockFreeOverFG for " + i + " threads:" + margin);
+            j++;
+        }
+    }
+
+    public static void contentionFindTest1(){
+        ContentionThreads threads = new ContentionThreads();
+
+        long [] LockFreeTimes = new long[4];
+        AbstractSet<Integer> list = createList("Lock-Free");
+        int j = 0;
+        for(int i = 1; i < 9; i*=2){
+            LockFreeTimes[j] = threads.contentionFind(list, i, -100, 100, 100);
+            j++;
+        }
+
+        long [] FineGrainedTimes = new long[4];
+        list = createList("Fine Grained");
+        j = 0;
+        for(int i = 1; i < 9; i*=2){
+            FineGrainedTimes[j] = threads.contentionFind(list, i, -100, 100, 100);
+            j++;
+        }
+
+        j = 0;
+        for(int i = 1; i < 9; i*=2){
+            long margin = (LockFreeTimes[j] - FineGrainedTimes[j])/(LockFreeTimes[j]/100);
+            System.out.println("LockFreeOverFG for " + i + " threads:" + margin);
+            j++;
+        }
+    }
+
+    public static void contentionFindTest2(){
+        ContentionThreads threads = new ContentionThreads();
+
+        long [] LockFreeTimes = new long[4];
+        AbstractSet<Integer> list = createList("Lock-Free");
+        int j = 0;
+        for(int i = 1; i < 9; i*=2){
+            LockFreeTimes[j] = threads.contentionFind(list, i, -100, 100, 1000);
+            j++;
+        }
+
+        long [] FineGrainedTimes = new long[4];
+        list = createList("Fine Grained");
+        j = 0;
+        for(int i = 1; i < 9; i*=2){
+            FineGrainedTimes[j] = threads.contentionFind(list, i, -100, 100, 1000);
+            j++;
+        }
+
+        j = 0;
+        for(int i = 1; i < 9; i*=2){
+            long margin = (LockFreeTimes[j] - FineGrainedTimes[j])/(LockFreeTimes[j]/100);
+            System.out.println("LockFreeOverFG for " + i + " threads:" + margin);
+            j++;
+        }
+    }
+
+    public static void contentionFindTest3(){
+        ContentionThreads threads = new ContentionThreads();
+
+        long [] LockFreeTimes = new long[4];
+        AbstractSet<Integer> list = createList("Lock-Free");
+        int j = 0;
+        for(int i = 1; i < 9; i*=2){
+            LockFreeTimes[j] = threads.contentionFind(list, i, -100, 100, 10000);
+            j++;
+        }
+
+        long [] FineGrainedTimes = new long[4];
+        list = createList("Fine Grained");
+        j = 0;
+        for(int i = 1; i < 9; i*=2){
+            FineGrainedTimes[j] = threads.contentionFind(list, i, -100, 100, 10000);
+            j++;
+        }
+
+        j = 0;
+        for(int i = 1; i < 9; i*=2){
+            long margin = (LockFreeTimes[j] - FineGrainedTimes[j])/(LockFreeTimes[j]/100);
+            System.out.println("LockFreeOverFG for " + i + " threads:" + margin);
+            j++;
+        }
+    }
+
+
 
     //Tests a single contains method time
     public static void singleThreadContainsTimingTest1(String listType){

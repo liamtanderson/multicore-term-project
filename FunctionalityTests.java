@@ -4,10 +4,9 @@ public class FunctionalityTests {
         
         //multiThreadInsertTest1("Fine Grained");
         //singleThreadInsertTestLockFree(15);
-        //multiThreadInsertTest11("Lock-Free");
-    
-        //multiThreadInsertTest2("Fine Grained");
-        //multiThreadInsertTest2("Lock-Free");
+        //multiThreadInsertTest1("Lock-Free");
+        multiThreadInsertTest2("Fine Grained");
+        multiThreadInsertTest2("Lock-Free");
         //multiThreadRemoveTest1("Fine Grained");
         //multiThreadRemoveTest1("Lock-Free");
     }
@@ -34,6 +33,7 @@ public class FunctionalityTests {
             System.out.println("Fine Grained Skiplist created");
         } else {
             list = new LockFreeSkipList(10);
+            System.out.println("Lock Free Skiplist created");
         }
         TestThreads test = new TestThreads();
         test.makeAddBetweenWithRepeatsThread(list);

@@ -39,9 +39,9 @@ public class FineGrainedSkipList extends AbstractSet<Integer> {
     public FineGrainedSkipList(int maxLevel) {
         this.currentLevels = new AtomicInteger(0);
         this.size = new AtomicInteger(0);
-        this.maxLevel = maxLevel;
-        header = new Node(Integer.MAX_VALUE, 0, maxLevel);
-        for (int i = 0; i < maxLevel; i += 1) {
+        this.maxLevel = maxLevel + 1;
+        header = new Node(Integer.MAX_VALUE, 0, maxLevel + 1);
+        for (int i = 0; i < maxLevel + 1; i += 1) {
             header.next[i] = header;
         }
     }
@@ -361,14 +361,15 @@ public class FineGrainedSkipList extends AbstractSet<Integer> {
     }
 
     //Used for debugging purposes
-    public String stringify() {
+    @Override
+    public String toString() {
         String result = "{";
 
         int bottomLevel = 0;
         final int lastValue = Integer.MAX_VALUE;
         Node pred = header, curr = null;
 
-        for (int level = this.maxLevel; level >= bottomLevel; level--) {
+        for (int level = this.maxLevel - 1; level >= bottomLevel; level--) {
             result += "\n    "+level+": ";
             curr = pred.next[level];
             while (curr.value < lastValue) {
@@ -381,7 +382,7 @@ public class FineGrainedSkipList extends AbstractSet<Integer> {
 
         return result;
     }
-
+    /*
     @Override
     public String toString() {
         StringBuilder s = new StringBuilder("[");
@@ -391,4 +392,5 @@ public class FineGrainedSkipList extends AbstractSet<Integer> {
         s.append(']');
         return s.toString();
     }
+    */
 }
